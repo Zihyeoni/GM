@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post[0] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+</head>
+<body>
+    <header>
+        <h1>{{ post[0] }}</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">목록</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="view">
+            <h2>{{ post[0] }}</h2>
+            <article>
+                <p>작성자: {{ post[2] }}</p>
+                <p>날짜: {{ post[3] }}</p>
+                <div class="content">
+                    <p>{{ post[1] }}</p>
+                    {% if post[4] %}
+                    <img src="{{ url_for('uploaded_file', filename=post[4]) }}" alt="첨부 사진">
+                    {% endif %}
+                </div>
+                <button onclick="history.back()">목록으로 돌아가기</button>
+            </article>
+        </section>
+    </main>
+    <footer>
+        <center><p>&copy; 게시판</p></center>
+    </footer>
+</body>
+</html>

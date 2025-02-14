@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 연습</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>게시판</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">목록</a></li>
+                <li><a href="{{ url_for('write') }}">글쓰기</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="list">
+            <h2>게시판 목록</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>날짜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ post[0] }}</td>
+                        <td><a href="{{ url_for('view', post_id=post[0]) }}">{{ post[1] }}</a></td>
+                        <td>{{ post[2] }}</td>
+                        <td>{{ post[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <center><p>&copy; 게시판</p></center>
+    </footer>
+</body>
+</html>
