@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTR 분석</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .ad { margin: 20px; padding: 15px; border: 1px solid #ccc; display: inline-block; cursor: pointer; }
+        .ctr-data { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>광고 CTR 분석</h1>
+    <div id="ads-container">
+        <!-- 광고가 동적으로 추가됨 -->
+    </div>
+
+    <h2>CTR 데이터</h2>
+    <table border="1" width="50%" align="center">
+        <thead>
+            <tr>
+                <th>광고 이름</th>
+                <th>노출 수</th>
+                <th>클릭 수</th>
+                <th>CTR (%)</th>
+            </tr>
+        </thead>
+        <tbody id="ctr-table-body">
+            <!-- 데이터가 동적으로 추가됨 -->
+        </tbody>
+    </table>
+
+    <script>
+        // 광고 노출 이벤트 서버로 전송
+        function recordView(adId) {
+            fetch("/view", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ad_id: adId })
+            });
+        }
+
+        // 광고 클릭 이벤트 서버로 전송
+        function recordClick(adId) {
+            fetch("/click", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ad_id: adId })
+            }).then(() => {
+                alert("광고 클릭이 기록되었습니다!");
+                fetchCTR(); // CTR 데이터 업데이트
+            });
+        }
+
+        // CTR 데이터 가져오기 및 화면 갱신
+        function fetchCTR() {
+            fetch("/ctr")
+                .then(response => response.json())
+                .then(data => {
+                    const ctrTableBody = document.getElementById("ctr-table-body");
+                    ctrTableBody.innerHTML = ""; // 기존 데이터 초기화
+
+                    data.forEach(ad => {
+                        ctrTableBody.innerHTML += `
+                            <tr>
+                                <td>${ad.ad_name}</td>
+                                <td>${ad.views}</td>
+                                <td>${ad.clicks}</td>
+                                <td>${Number(ad.ctr).toFixed(2)}%</td>
+                            </tr>
+                        `;
+                    });
+                });
+        }
+
+        // 광고 목록 생성
+        function loadAds() {
+            const adsContainer = document.getElementById("ads-container");
+            adsContainer.innerHTML = `
+                <div class="ad" onclick="recordClick(1); recordView(1)">광고 A</div>
+                <div class="ad" onclick="recordClick(2); recordView(2)">광고 B</div>
+                <div class="ad" onclick="recordClick(3); recordView(3)">광고 C</div>
+            `;
+        }
+
+        // 페이지 로드 시 광고 불러오기 및 CTR 데이터 갱신
+        window.onload = function () {
+            loadAds();
+            fetchCTR();
+            setInterval(fetchCTR, 5000); // 5초마다 CTR 데이터 갱신
+        };
+    </script>
+</body>
+</html>
