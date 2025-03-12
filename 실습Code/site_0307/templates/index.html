@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객 세그먼테이션 예측</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>멋사 GM 1기 고객 세그먼테이션 예측</h2>
+        <form id="predict-form">
+            <input type="number" id="visit" placeholder="방문 빈도" required>
+            <input type="number" id="purchase" placeholder="구매 금액" required>
+            <input type="number" id="recency" placeholder="최근 구매일" required>
+            <input type="number" step="0.001" id="ctr" placeholder="CTR (클릭률)" required>
+            <input type="number" id="returns" placeholder="반품 횟수" required>
+            <button type="submit">예측하기</button>
+        </form>
+        <h3>예측 결과: <span id="prediction-result"></span></h3>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#predict-form").submit(function(event){
+                event.preventDefault();
+
+                let inputData = {
+                    visit: parseInt($("#visit").val()),
+                    purchase: parseInt($("#purchase").val()),
+                    recency: parseInt($("#recency").val()),
+                    ctr: parseFloat($("#ctr").val()),
+                    returns: parseInt($("#returns").val())
+                };
+
+                $.ajax({
+                    url: "/predict",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(inputData),
+                    success: function(response){
+                        $("#prediction-result").text(response.prediction);
+                    },
+                    error: function(){
+                        $("#prediction-result").text("예측 오류 발생");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

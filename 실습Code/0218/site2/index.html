@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그로스 마케팅 데이터</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        async function fetchData() {
+            const response = await fetch('/growth-marketing');
+            const data = await response.json();
+            const tableBody = document.getElementById("data-table-body");
+
+            tableBody.innerHTML = "";
+            data.forEach(item => {
+                let row = `<tr>
+                    <td>${item.date}</td>
+                    <td>${item.channel}</td>
+                    <td>${item.campaign}</td>
+                    <td>${item.impressions}</td>
+                    <td>${item.clicks}</td>
+                    <td>${item.conversions}</td>
+                    <td>${item.conversion_rate}%</td>
+                    <td>${item.revenue}</td>
+                    <td>${item.cost}</td>
+                    <td>${item.roi}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <h1>그로스 마케팅 데이터</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>날짜</th>
+                <th>채널</th>
+                <th>캠페인</th>
+                <th>노출수</th>
+                <th>클릭수</th>
+                <th>전환수</th>
+                <th>전환율</th>
+                <th>매출</th>
+                <th>비용</th>
+                <th>ROI</th>
+            </tr>
+        </thead>
+        <tbody id="data-table-body"></tbody>
+    </table>
+</body>
+</html>

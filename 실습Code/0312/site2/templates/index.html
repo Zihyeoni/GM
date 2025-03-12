@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객 충성도 예측</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>고객 충성도 예측</h2>
+        <form id="predict-form">
+            <label>나이:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label>월 평균 구매 횟수:</label>
+            <input type="number" id="monthly_purchases" name="monthly_purchases" required>
+
+            <label>월 평균 지출 금액:</label>
+            <input type="number" id="monthly_spending" name="monthly_spending" required>
+
+            <label>고객 서비스 문의 횟수:</label>
+            <input type="number" id="customer_support_calls" name="customer_support_calls" required>
+
+            <button type="submit">예측하기</button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("predict-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("result").innerHTML = `<p style="color: red;">오류 발생: ${data.error}</p>`;
+                } else {
+                    document.getElementById("result").innerHTML = `
+                        <p>예측된 고객 충성도: <strong>${data.predicted_class}</strong></p>
+                        <p>낮음: ${data.probabilities.낮음}</p>
+                        <p>중간: ${data.probabilities.중간}</p>
+                        <p>높음: ${data.probabilities.높음}</p>
+                    `;
+                }
+            })
+            .catch(error => {
+                document.getElementById("result").innerHTML = `<p style="color: red;">API 호출 오류: ${error}</p>`;
+            });
+        });
+    </script>
+
+</body>
+</html>
