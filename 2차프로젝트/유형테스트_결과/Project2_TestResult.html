@@ -1,0 +1,19 @@
+<table width="100%" bgcolor="#ffffff" align="center" cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif;"> 
+    <tr> 
+        <td align="center">
+           <div style="width: 384px; height: 576px; background-size: cover; background-repeat: no-repeat; position: relative;
+                   {% if subscriber.test_result == 'Android 개발' %} background-image: url('https://embed.filekitcdn.com/e/od3bu7KhapN8Yk3tL5EP4w/j8oyNqtjcvBvGRrPzAt8mW/email');
+                   {% elsif subscriber.test_result == '클라우드 엔지니어링' %} background-image: url('https://embed.filekitcdn.com/e/od3bu7KhapN8Yk3tL5EP4w/9FnKDTkWKMztgyHrETd5fy/email');
+                   {% elsif subscriber.test_result == '백엔드: Python' %} background-image: url('https://embed.filekitcdn.com/e/od3bu7KhapN8Yk3tL5EP4w/ogqGYSSJBeafdXWgDJvUgQ/email');
+                   {% elsif subscriber.test_result == 'AI 웹서비스' %} background-image: url('https://embed.filekitcdn.com/e/od3bu7KhapN8Yk3tL5EP4w/dnEhjdKmjvjGUoGJqK6o3u/email');
+                   {% elsif subscriber.test_result == '프론트엔드' %} background-image: url('https://embed.filekitcdn.com/e/od3bu7KhapN8Yk3tL5EP4w/d7ZY6mmcnP9hryXp4dnkb4/email');
+                   {% endif %}
+           "> 
+          <!-- 텍스트 위치 조정 (padding-top 사용) --> 
+          <div style="padding-top: 45px; text-align: center; font-size: 20px; font-weight: bold; color: #000000; line-height: 1.2;"> 
+                  <span style="color: #FF6000;">{{ subscriber.first_name }}</span>님에게<br/>딱 맞는 부트캠프는?
+          </div>
+          </div> 
+        </td> 
+    </tr>
+</table>
